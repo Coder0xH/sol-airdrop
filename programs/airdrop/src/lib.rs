@@ -1,6 +1,7 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Token, TokenAccount, Transfer, Mint};
 use anchor_spl::associated_token::AssociatedToken;
+use anchor_lang::solana_program;
 
 declare_id!("HMsLRRqoo8SpnR9acz49Mq7ht19x93Kp62DdGFKoRTYe");
 
@@ -65,9 +66,45 @@ pub mod airdrop {
     ) -> Result<()> {
         let claimer = ctx.accounts.claimer.key();
         
-        // 在测试环境中，我们简化签名验证逻辑
-        // 在实际生产环境中，应该使用更安全的验证方式
-        // 这里我们假设签名总是有效的
+        // 创建要验证的消息
+        let message = ClaimMessage {
+            wallet: claimer,
+            amount,
+        };
+        let message_bytes = message.try_to_vec()?;
+        
+        // 使用state.signer公钥验证签名
+        let signer_pubkey = ctx.accounts.state.signer;
+        
+        // 创建验证签名的指令
+        let signer_pubkey_bytes = signer_pubkey.to_bytes();
+        
+        // 构建 ed25519 程序指令数据
+        let mut data = vec![0]; // 指令类型 0
+        data.extend_from_slice(&[signer_pubkey_bytes.len() as u8]); // 公钥长度
+        data.extend_from_slice(&signer_pubkey_bytes); // 公钥
+        data.extend_from_slice(&[(message_bytes.len() as u16).to_le_bytes()[0]]); // 消息长度低字节
+        data.extend_from_slice(&[(message_bytes.len() as u16).to_le_bytes()[1]]); // 消息长度高字节
+        data.extend_from_slice(&message_bytes); // 消息
+        data.extend_from_slice(&signature); // 签名
+        
+        // 构建验证指令
+        let instruction = solana_program::instruction::Instruction {
+            program_id: solana_program::ed25519_program::id(),
+            accounts: vec![],
+            data,
+        };
+        
+        // 验证签名
+        let ix_result = solana_program::program::invoke(
+            &instruction,
+            &[ctx.accounts.claimer.to_account_info()]
+        );
+        
+        // 检查签名验证结果
+        if ix_result.is_err() {
+            return err!(AirdropError::InvalidSignature);
+        }
         
         // 检查是否已经使用过该签名
         let claim_record = &mut ctx.accounts.claim_record;
