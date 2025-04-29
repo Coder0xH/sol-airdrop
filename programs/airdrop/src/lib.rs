@@ -2,7 +2,7 @@ use anchor_lang::prelude::*;
 use anchor_spl::token::{self, Token, TokenAccount, Transfer, Mint};
 use anchor_spl::associated_token::AssociatedToken;
 
-declare_id!("DcHJY8cFnyPgVskEDYhAKxaSpfWmZPa4wJc9YYeGRhsF");
+declare_id!("HMsLRRqoo8SpnR9acz49Mq7ht19x93Kp62DdGFKoRTYe");
 
 #[program]
 pub mod airdrop {

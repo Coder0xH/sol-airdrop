@@ -8,13 +8,16 @@ resolution = true
 skip-lint = false
 
 [programs.localnet]
-airdrop = "DcHJY8cFnyPgVskEDYhAKxaSpfWmZPa4wJc9YYeGRhsF"
+airdrop = "HMsLRRqoo8SpnR9acz49Mq7ht19x93Kp62DdGFKoRTYe"
+
+[programs.devnet]
+airdrop = "HMsLRRqoo8SpnR9acz49Mq7ht19x93Kp62DdGFKoRTYe"
 
 [registry]
 url = "https://api.apr.dev"
 
 [provider]
-cluster = "Localnet"
+cluster = "devnet"
 wallet = "/Users/dexter/.config/solana/id.json"
 
 [scripts]

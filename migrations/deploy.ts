@@ -12,7 +12,7 @@ const idlPath = path.join(__dirname, "../target/idl/airdrop.json");
 const idl = JSON.parse(readFileSync(idlPath, "utf8"));
 
 // 读取程序 ID
-const programId = new PublicKey("DcHJY8cFnyPgVskEDYhAKxaSpfWmZPa4wJc9YYeGRhsF");
+const programId = new PublicKey("HMsLRRqoo8SpnR9acz49Mq7ht19x93Kp62DdGFKoRTYe");
 
 module.exports = async function (provider) {
   // 配置客户端使用提供的 provider
