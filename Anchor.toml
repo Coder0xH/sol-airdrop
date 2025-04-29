@@ -1,9 +1,10 @@
 [toolchain]
-anchor_version = "0.31.0"
-solana_version = "1.17.0"
+anchor_version = "0.31.1"
+solana_version = "2.1.21"
+package_manager = "yarn"
 
 [features]
-seeds = false
+resolution = true
 skip-lint = false
 
 [programs.localnet]
